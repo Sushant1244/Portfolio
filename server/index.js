@@ -29,7 +29,25 @@ app.post('/api/ask', async (req, res) => {
   if (!message) return res.status(400).json({ error: 'Missing message' });
 
   if (!process.env.GENAI_API_KEY) {
-    return res.status(503).json({ error: 'GENAI_API_KEY not configured on the server. Set GENAI_API_KEY to enable AI.' });
+    // Provide a helpful local fallback using portfolio data when no API key is present
+    const { PORTFOLIO_DATA, PROJECTS, EXPERIENCES, SKILLS } = require('../constants');
+    const m = (message || '').toLowerCase();
+    if (m.includes('skill')) {
+      return res.json({ text: `Top skills: ${SKILLS.map(s => s.name).join(', ')}.` });
+    }
+    if (m.includes('project')) {
+      const list = PROJECTS.slice(0, 5).map(p => `- ${p.title}: ${p.description}`).join('\n');
+      return res.json({ text: `Here are some projects:\n${list}` });
+    }
+    if (m.includes('contact') || m.includes('email') || m.includes('phone')) {
+      return res.json({ text: `Contact ${PORTFOLIO_DATA.name} at ${PORTFOLIO_DATA.email} or ${PORTFOLIO_DATA.phone}.` });
+    }
+    if (m.includes('experience')) {
+      const parts = EXPERIENCES.map(e => e.role + ' at ' + e.company + ' (' + e.period + ')');
+      return res.json({ text: 'Experience highlights: ' + parts.join('; ') });
+    }
+
+    return res.json({ text: `Hi — I'm ${PORTFOLIO_DATA.name}'s assistant. Ask me about skills, projects, or contact information.` });
   }
 
   try {
