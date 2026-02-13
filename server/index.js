@@ -5,6 +5,39 @@ const dotenv = require('dotenv');
 // We'll require it lazily inside the handler when GENAI_API_KEY is present.
 const admin = require('firebase-admin');
 
+// Portfolio data - shared with frontend
+const PORTFOLIO_DATA = {
+  name: "Sumit Shah",
+  role: "Senior Full Stack Engineer",
+  location: "San Francisco, CA",
+  bio: "Passionate developer specialized in building scalable high-performance web applications with React, Node.js, and Cloud architectures. I love bridging the gap between design and robust engineering.",
+  email: "sushantsha985@gmail.com",
+  phone: "9766325733",
+  github: "https://github.com/Sushant1244",
+  linkedin: "https://www.linkedin.com/in/sumit-shah-216569388/",
+  twitter: "https://twitter.com"
+};
+
+const PROJECTS = [
+  { id: "1", title: "QuantumSaaS Dashboard", description: "Enterprise-grade analytics platform for tracking real-time cloud infrastructure performance.", tags: ["React", "TypeScript", "D3.js", "Node.js", "Redis"] },
+  { id: "2", title: "EcoStream Mobile", description: "Sustainability tracking app with social integration.", tags: ["React Native", "Firebase", "Node.js", "GraphQL"] },
+  { id: "3", title: "HyperCommerce", description: "High-performance e-commerce engine with AI-driven recommendations.", tags: ["Next.js", "PostgreSQL", "Tailwind", "Gemini API"] },
+  { id: "4", title: "Electrocart E-commerce", description: "A full-featured online store platform.", tags: ["React", "Node.js", "PostgreSQL", "Stripe"] },
+  { id: "5", title: "Connunity", description: "A community platform for creators and shoppers.", tags: ["React", "Firebase", "Realtime"] },
+  { id: "6", title: "Electrocart App", description: "Mobile companion app for Electrocart.", tags: ["React Native", "Firebase", "Stripe"] }
+];
+
+const EXPERIENCES = [
+  { company: "TechGiant Corp", role: "Senior Software Engineer", period: "2021 - Present", skills: ["React", "TypeScript", "AWS", "Kubernetes"] },
+  { company: "Innovate Labs", role: "Full Stack Developer", period: "2018 - 2021", skills: ["Vue.js", "Node.js", "MongoDB", "Docker"] }
+];
+
+const SKILLS = [
+  { name: "React" }, { name: "TypeScript" }, { name: "Tailwind CSS" }, { name: "Next.js" },
+  { name: "Node.js" }, { name: "PostgreSQL" }, { name: "Redis" }, { name: "GraphQL" },
+  { name: "AWS" }, { name: "Docker" }, { name: "GitHub Actions" }, { name: "Figma" }
+];
+
 dotenv.config();
 
 const app = express();
@@ -30,7 +63,6 @@ app.post('/api/ask', async (req, res) => {
 
   if (!process.env.GENAI_API_KEY) {
     // Provide a helpful local fallback using portfolio data when no API key is present
-    const { PORTFOLIO_DATA, PROJECTS, EXPERIENCES, SKILLS } = require('../constants');
     const m = (message || '').toLowerCase();
     if (m.includes('skill')) {
       return res.json({ text: `Top skills: ${SKILLS.map(s => s.name).join(', ')}.` });

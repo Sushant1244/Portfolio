@@ -13,7 +13,7 @@ const EXAMPLE_PROMPTS = [
 const AIChat: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'model', content: "Hi! I'm Alex's AI Twin. Ask me anything about their experience, skills, or projects!" }
+    { role: 'model', content: "Hi! I'm Sumit's AI Twin. Ask me anything about their experience, skills, or projects!" }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
